@@ -6,18 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using WinServerChecker.Core.Configuration;
-using WinServerChecker.Core.Formatters;
-using WinServerChecker.Core.Interfaces;
-using WinServerChecker.Core.Model;
+using WinServerChecker.Configuration;
+using WinServerChecker.Formatters;
+using WinServerChecker.Interfaces;
+using WinServerChecker.Model;
 
-namespace WinServerChecker.Core
+namespace WinServerChecker
 {
     public class WinServerCheckerHandler : IHttpHandler
     {
         private static bool _init = false;
         private static object _lock = new object();
-        private static ConcurrentDictionary<string, IStatusCheck> _checks;
+        private static ConcurrentDictionary<string, ICheck> _checks;
 
         public bool IsReusable
         {
@@ -53,14 +53,14 @@ namespace WinServerChecker.Core
 
             var wcSection = (WinServerCheckerConfigurationSection)section;
 
-            _checks = new ConcurrentDictionary<string, IStatusCheck>();
+            _checks = new ConcurrentDictionary<string, ICheck>();
 
             foreach(ProviderSettings check in wcSection.Checks)
             {
                 Type checkType = Type.GetType(check.Type, true);
                 var nvConfig = check.Parameters;
 
-                var theCheck = (IStatusCheck)Activator.CreateInstance(checkType, true);
+                var theCheck = (ICheck)Activator.CreateInstance(checkType, true);
                 theCheck.Initialize(nvConfig);
 
                 _checks.TryAdd(check.Name, theCheck);

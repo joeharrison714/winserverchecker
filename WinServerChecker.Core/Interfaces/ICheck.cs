@@ -4,11 +4,11 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WinServerChecker.Core.Model;
+using WinServerChecker.Model;
 
-namespace WinServerChecker.Core.Interfaces
+namespace WinServerChecker.Interfaces
 {
-    public interface IStatusCheck
+    public interface ICheck
     {
         void Initialize(NameValueCollection parameters);
         CheckResult Check();

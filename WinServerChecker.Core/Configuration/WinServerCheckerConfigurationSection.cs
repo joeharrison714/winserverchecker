@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WinServerChecker.Core.Configuration
+namespace WinServerChecker.Configuration
 {
     public class WinServerCheckerConfigurationSection : ConfigurationSection
     {

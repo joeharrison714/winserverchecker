@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WinServerChecker.Core.Interfaces;
-using WinServerChecker.Core.Model;
+using WinServerChecker.Interfaces;
+using WinServerChecker.Model;
 
-namespace WinServerChecker.Core.Formatters
+namespace WinServerChecker.Formatters
 {
     public class JsonFormatter : IFormatter
     {

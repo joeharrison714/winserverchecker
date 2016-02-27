@@ -7,8 +7,8 @@
     <ProjectGuid>{24AF41B0-AA07-497B-8AAA-A73993CDA7DC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WinServerChecker.Core</RootNamespace>
-    <AssemblyName>WinServerChecker.Core</AssemblyName>
+    <RootNamespace>WinServerChecker</RootNamespace>
+    <AssemblyName>WinServerChecker</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -45,13 +45,13 @@
     <Compile Include="Configuration\WinServerCheckerConfigurationSection.cs" />
     <Compile Include="Formatters\JsonFormatter.cs" />
     <Compile Include="Interfaces\IFormatter.cs" />
-    <Compile Include="Interfaces\IStatusCheck.cs" />
+    <Compile Include="Interfaces\ICheck.cs" />
     <Compile Include="Model\CheckResult.cs" />
     <Compile Include="Model\WinServerCheckerResponse.cs" />
     <Compile Include="Model\StatusCheckResponse.cs" />
-    <Compile Include="StatusChecks\DiskSpaceCheck.cs" />
-    <Compile Include="StatusChecks\FileExistsCheck.cs" />
-    <Compile Include="StatusChecks\UptimeCheck.cs" />
+    <Compile Include="Checks\DiskSpaceCheck.cs" />
+    <Compile Include="Checks\FileExistsCheck.cs" />
+    <Compile Include="Checks\UptimeCheck.cs" />
     <Compile Include="WinServerCheckerHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
