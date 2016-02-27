@@ -71,6 +71,8 @@ namespace WinServerChecker.Core
         {
             Init();
 
+            bool overall = true;
+
             WinServerCheckerResponse wcResponse = new WinServerCheckerResponse();
             wcResponse.Date = DateTime.UtcNow;
             foreach (var check in _checks)
@@ -91,6 +93,8 @@ namespace WinServerChecker.Core
                     scr.Message = ex.Message;
                 }
 
+                if (!scr.Passed) overall = false;
+
                 wcResponse.Checks.Add(scr);
             }
 
@@ -99,6 +103,11 @@ namespace WinServerChecker.Core
 
             context.Response.Cache.SetCacheability(HttpCacheability.NoCache);
             context.Response.ContentType = formatter.ContentType;
+
+            if (!overall)
+            {
+                context.Response.StatusCode = 500;
+            }
 
             context.Response.Write(content);
 

@@ -1,5 +1,5 @@
 # WinServerChecker
-A simple health checking tool for windows. Checkes configures items and returns a response with the status of those checks. Great for uptime monitors like Pingdom.
+A simple health checking tool for windows. Will check configured items and returns a response with the status of those checks. Great for uptime monitors like Pingdom.
 
 This tool uses ASP.NET and the checks are configured through the web.config file.
 
