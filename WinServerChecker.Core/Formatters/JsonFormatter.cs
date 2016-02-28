@@ -90,8 +90,12 @@ namespace WinServerChecker.Formatters
                 quoted = true;
                 val = ((DateTime)source).ToString("o");
             }
-            else if (source is bool ||
-                source is int ||
+            else if (source is bool)
+            {
+                quoted = false;
+                val = source.ToString().ToLower();
+            }
+            else if (source is int ||
                 source is double ||
                 source is decimal ||
                 source is float ||

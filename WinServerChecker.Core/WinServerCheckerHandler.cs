@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using WinServerChecker.Authentication;
 using WinServerChecker.Configuration;
 using WinServerChecker.Formatters;
 using WinServerChecker.Interfaces;
@@ -18,6 +20,7 @@ namespace WinServerChecker
         private static bool _init = false;
         private static object _lock = new object();
         private static ConcurrentDictionary<string, ICheck> _checks;
+        private static ConcurrentDictionary<string, IAuthenticator> _authenticators;
 
         public bool IsReusable
         {
@@ -65,11 +68,49 @@ namespace WinServerChecker
 
                 _checks.TryAdd(check.Name, theCheck);
             }
+
+
+            _authenticators = new ConcurrentDictionary<string, IAuthenticator>();
+            if (wcSection.Authenticators != null && wcSection.Authenticators.Count > 0)
+            {
+                foreach (ProviderSettings authenticator in wcSection.Authenticators)
+                {
+                    Type checkType = Type.GetType(authenticator.Type, true);
+                    var nvConfig = authenticator.Parameters;
+
+                    var theAuth = (IAuthenticator)Activator.CreateInstance(checkType, true);
+                    theAuth.Initialize(nvConfig);
+
+                    _authenticators.TryAdd(authenticator.Name, theAuth);
+                }
+            }
         }
 
         public void ProcessRequest(HttpContext context)
         {
             Init();
+
+            if (_authenticators.Count > 0)
+            {
+                bool anyAuthenticated = false;
+                foreach (var auth in _authenticators)
+                {
+                    bool thisAuth = auth.Value.Authenticate(context.Request);
+                    if (thisAuth)
+                    {
+                        anyAuthenticated = true;
+                        break;
+                    }
+                }
+
+                if (!anyAuthenticated)
+                {
+                    context.Response.StatusCode = 403;
+                    context.Response.ContentType = "text/plain";
+                    context.Response.Write("Access denied");
+                    return;
+                }
+            }
 
             bool overall = true;
 

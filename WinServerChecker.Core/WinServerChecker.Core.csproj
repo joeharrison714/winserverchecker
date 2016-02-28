@@ -42,9 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\RequestHeaderAuthenticator.cs" />
     <Compile Include="Checks\CPUCheck.cs" />
     <Compile Include="Configuration\WinServerCheckerConfigurationSection.cs" />
     <Compile Include="Formatters\JsonFormatter.cs" />
+    <Compile Include="Interfaces\IAuthenticator.cs" />
     <Compile Include="Interfaces\IFormatter.cs" />
     <Compile Include="Interfaces\ICheck.cs" />
     <Compile Include="Model\CheckResult.cs" />

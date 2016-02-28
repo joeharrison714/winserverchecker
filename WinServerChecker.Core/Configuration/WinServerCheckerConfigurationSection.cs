@@ -19,6 +19,7 @@ namespace WinServerChecker.Configuration
 
             //_properties.Add(_propEndSessionTimeoutSeconds);
             _properties.Add(_propChecks);
+            _properties.Add(_propAuthenticators);
         }
 
         protected override ConfigurationPropertyCollection Properties
@@ -46,6 +47,14 @@ namespace WinServerChecker.Configuration
             ConfigurationPropertyOptions.None
            );
 
+        private static readonly ConfigurationProperty _propAuthenticators =
+            new ConfigurationProperty(
+            "authenticators",
+            typeof(ProviderSettingsCollection),
+            null,
+            ConfigurationPropertyOptions.None
+           );
+
         //public int EndSessionTimeoutSeconds
         //{
         //    get
@@ -67,6 +76,18 @@ namespace WinServerChecker.Configuration
             set
             {
                 base[_propChecks] = value;
+            }
+        }
+
+        public ProviderSettingsCollection Authenticators
+        {
+            get
+            {
+                return (ProviderSettingsCollection)base[_propAuthenticators];
+            }
+            set
+            {
+                base[_propAuthenticators] = value;
             }
         }
     }
