@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Checks\CPUCheck.cs" />
     <Compile Include="Configuration\WinServerCheckerConfigurationSection.cs" />
     <Compile Include="Formatters\JsonFormatter.cs" />
     <Compile Include="Interfaces\IFormatter.cs" />

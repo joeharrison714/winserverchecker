@@ -21,6 +21,8 @@ namespace WinServerChecker.Checks
 
         public CheckResult Check()
         {
+            var cr = new CheckResult();
+
             DriveInfo di = new DriveInfo(_driveLetter);
 
             long freeSpace = di.AvailableFreeSpace;
@@ -30,14 +32,14 @@ namespace WinServerChecker.Checks
 
             percentFree = percentFree * 100;
 
-            bool passed = (percentFree > _mintPercentFreeSpace);
-            string message = string.Format("{0} drive has {1}% free space", _driveLetter, percentFree.ToString("N0"));
+            cr.Passed = (percentFree > _mintPercentFreeSpace);
 
-            return new CheckResult()
-            {
-                Message = message,
-                Passed = passed
-            };
+            cr.Data.Add("size", size);
+            cr.Data.Add("freeSpace", freeSpace);
+            cr.Data.Add("percentFree", percentFree);
+            cr.Data.Add("percentFreeDisplay", percentFree.ToString("N0") + "%");
+
+            return cr;
         }
 
         public void Initialize(NameValueCollection parameters)

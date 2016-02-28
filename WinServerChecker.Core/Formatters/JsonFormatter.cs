@@ -29,31 +29,10 @@ namespace WinServerChecker.Formatters
                 if (checkIndex > 0) sb.AppendLine(",");
 
                 sb.AppendLine("\t{");
-
-                sb.Append("\t\t");
-                sb.AppendLine(string.Format("\"{0}\": \"{1}\",", "name", check.Name));
-
-                sb.Append("\t\t");
-                sb.Append(string.Format("\"{0}\": {1}", "passed", check.Passed.ToString().ToLower()));
-
-                if (!string.IsNullOrWhiteSpace(check.Message))
-                {
-                    sb.AppendLine(",");
-
-                    string messageEscaped = check.Message.Replace("\"", "\\\"");
-
-                    sb.Append("\t\t");
-                    sb.AppendLine(string.Format("\"{0}\": \"{1}\"", "message", messageEscaped));
-                }
-                else
-                {
-                    sb.AppendLine("");
-                }
-
+                sb.Append(GetElements(check));
                 sb.Append("\t}");
 
                 checkIndex++;
-                //if ()
             }
 
             sb.AppendLine("]");
@@ -61,6 +40,87 @@ namespace WinServerChecker.Formatters
             sb.AppendLine("}");
 
             return sb.ToString();
+        }
+
+        private static string GetElements(StatusCheckResponse check)
+        {
+            List<KeyValuePair<string, object>> allData = new List<KeyValuePair<string, object>>();
+            allData.Add(new KeyValuePair<string, object>("name", check.Name));
+            allData.Add(new KeyValuePair<string, object>("passed", check.Passed));
+
+            if (!string.IsNullOrWhiteSpace(check.Message))
+            {
+                allData.Add(new KeyValuePair<string, object>("message", check.Message));
+            }
+
+            foreach (var extraDataItem in check.Data)
+            {
+                if (String.IsNullOrWhiteSpace(extraDataItem.Key)) continue;
+                if (extraDataItem.Value == null) continue;
+
+                allData.Add(new KeyValuePair<string, object>(extraDataItem.Key, extraDataItem.Value));
+            }
+
+            StringBuilder sb = new StringBuilder();
+            foreach(var kvp in allData)
+            {
+                string val = "";
+                val = GetVal(kvp.Value);
+
+                if (sb.Length > 0) sb.AppendLine(",");
+                sb.Append("\t\t");
+                sb.Append(string.Format("\"{0}\": {1}", kvp.Key, val));
+            }
+            sb.AppendLine("");
+            return sb.ToString();
+        }
+
+        private static string GetVal(object source)
+        {
+            string val = "";
+            bool quoted = true;
+
+            if (source is string)
+            {
+                quoted = true;
+                val = (string)source;
+            }
+            else if (source is DateTime)
+            {
+                quoted = true;
+                val = ((DateTime)source).ToString("o");
+            }
+            else if (source is bool ||
+                source is int ||
+                source is double ||
+                source is decimal ||
+                source is float ||
+                source is long)
+            {
+                quoted = false;
+                val = source.ToString();
+            }
+            else
+            {
+                quoted = true;
+                val = source.ToString();
+            }
+
+            
+            if (quoted)
+            {
+                return "\"" + Encode(val) + "\"";
+            }
+            else
+            {
+                return val;
+            }
+        }
+
+        private static string Encode(string name)
+        {
+            string encoded = name.Replace("\"", "\\\"");
+            return encoded;
         }
     }
 }

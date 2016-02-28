@@ -86,6 +86,7 @@ namespace WinServerChecker
 
                     scr.Passed = thisResult.Passed;
                     scr.Message = thisResult.Message;
+                    scr.Data = thisResult.Data;
                 }
                 catch (Exception ex)
                 {
@@ -94,6 +95,7 @@ namespace WinServerChecker
                 }
 
                 if (!scr.Passed) overall = false;
+                if (scr.Data == null) scr.Data = new Dictionary<string, object>();
 
                 wcResponse.Checks.Add(scr);
             }
