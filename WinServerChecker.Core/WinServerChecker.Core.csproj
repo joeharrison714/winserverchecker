@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\RequestHeaderAuthenticator.cs" />
+    <Compile Include="Checks\ComputerNameCheck.cs" />
     <Compile Include="Checks\CPUCheck.cs" />
     <Compile Include="Configuration\WinServerCheckerConfigurationSection.cs" />
     <Compile Include="Formatters\JsonFormatter.cs" />

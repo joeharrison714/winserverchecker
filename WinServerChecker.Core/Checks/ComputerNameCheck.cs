@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,15 +9,8 @@ using WinServerChecker.Model;
 
 namespace WinServerChecker.Checks
 {
-    public class UptimeCheck : ICheck
+    public class ComputerNameCheck : ICheck
     {
-        private PerformanceCounter uptime = new PerformanceCounter("System", "System Up Time");
-
-        public UptimeCheck()
-        {
-            uptime.NextValue();
-        }
-
         public CheckResult Check()
         {
             var cr = new CheckResult()
@@ -26,7 +18,7 @@ namespace WinServerChecker.Checks
                 Passed = true
             };
 
-            cr.Data.Add("uptime", TimeSpan.FromSeconds(uptime.NextValue()).ToString());
+            cr.Data.Add("computerName", Environment.MachineName);
 
             return cr;
         }

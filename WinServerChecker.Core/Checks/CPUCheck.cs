@@ -14,6 +14,11 @@ namespace WinServerChecker.Checks
     {
         private PerformanceCounter theCPUCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
 
+        public CPUCheck()
+        {
+            theCPUCounter.NextValue();
+        }
+
         public CheckResult Check()
         {
             var cpu = this.theCPUCounter.NextValue();
