@@ -21,6 +21,7 @@ namespace WinServerChecker
         private static object _lock = new object();
         private static ConcurrentDictionary<string, ICheck> _checks;
         private static ConcurrentDictionary<string, IAuthenticator> _authenticators;
+        private static bool _authenticatorsOperatorAny;
 
         public bool IsReusable
         {
@@ -55,6 +56,12 @@ namespace WinServerChecker
             }
 
             var wcSection = (WinServerCheckerConfigurationSection)section;
+
+            _authenticatorsOperatorAny = false;
+            if (string.Equals(wcSection.AuthenticatorsOperator, "any", StringComparison.OrdinalIgnoreCase))
+            {
+                _authenticatorsOperatorAny = true;
+            }
 
             _checks = new ConcurrentDictionary<string, ICheck>();
 
@@ -93,17 +100,32 @@ namespace WinServerChecker
             if (_authenticators.Count > 0)
             {
                 bool anyAuthenticated = false;
+                bool allAuthenticated = true;
                 foreach (var auth in _authenticators)
                 {
                     bool thisAuth = auth.Value.Authenticate(context.Request);
                     if (thisAuth)
                     {
                         anyAuthenticated = true;
-                        break;
+                    }
+                    else
+                    {
+                        allAuthenticated = false;
                     }
                 }
 
-                if (!anyAuthenticated)
+                bool isAuthenticated = false;
+
+                if (_authenticatorsOperatorAny && anyAuthenticated)
+                {
+                    isAuthenticated = true;
+                }
+                else if (allAuthenticated)
+                {
+                    isAuthenticated = true;
+                }
+
+                if (!isAuthenticated)
                 {
                     context.Response.StatusCode = 403;
                     context.Response.ContentType = "text/plain";

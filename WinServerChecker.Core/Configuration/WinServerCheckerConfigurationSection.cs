@@ -17,7 +17,7 @@ namespace WinServerChecker.Configuration
         {
             _properties = new ConfigurationPropertyCollection();
 
-            //_properties.Add(_propEndSessionTimeoutSeconds);
+            _properties.Add(_propAuthenticatorsOperator);
             _properties.Add(_propChecks);
             _properties.Add(_propAuthenticators);
         }
@@ -30,14 +30,14 @@ namespace WinServerChecker.Configuration
             }
         }
 
-        //public static readonly ConfigurationProperty _propEndSessionTimeoutSeconds =
-        //    new ConfigurationProperty(
-        //    "endSessionTimeoutSeconds",
-        //    typeof(int),
-        //    null,
-        //    null,
-        //    new System.Configuration.IntegerValidator(1, 1440),
-        //    ConfigurationPropertyOptions.None);
+        public static readonly ConfigurationProperty _propAuthenticatorsOperator =
+            new ConfigurationProperty(
+            "authenticatorsOperator",
+            typeof(string),
+            null,
+            null,
+            null,
+            ConfigurationPropertyOptions.None);
 
         private static readonly ConfigurationProperty _propChecks =
             new ConfigurationProperty(
@@ -55,17 +55,17 @@ namespace WinServerChecker.Configuration
             ConfigurationPropertyOptions.None
            );
 
-        //public int EndSessionTimeoutSeconds
-        //{
-        //    get
-        //    {
-        //        return (int)base[_propEndSessionTimeoutSeconds];
-        //    }
-        //    set
-        //    {
-        //        base[_propEndSessionTimeoutSeconds] = value;
-        //    }
-        //}
+        public string AuthenticatorsOperator
+        {
+            get
+            {
+                return (string)base[_propAuthenticatorsOperator];
+            }
+            set
+            {
+                base[_propAuthenticatorsOperator] = value;
+            }
+        }
 
         public ProviderSettingsCollection Checks
         {
