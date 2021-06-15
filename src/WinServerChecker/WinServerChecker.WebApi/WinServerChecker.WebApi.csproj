@@ -8,4 +8,8 @@
     <ProjectReference Include="..\WinServerChecker.Core\WinServerChecker.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Configuration\" />
+  </ItemGroup>
+
 </Project>

@@ -15,5 +15,18 @@ namespace WinServerChecker.Core.Model
 
         public DateTime Date { get; set; }
         public List<StatusCheckResponse> Checks { get; set; }
+
+        public bool OverallPassed
+        {
+            get
+            {
+                bool overall = true;
+                foreach (var scr in Checks)
+                {
+                    if (!scr.Passed) overall = false;
+                }
+                return overall;
+            }
+        }
     }
 }
