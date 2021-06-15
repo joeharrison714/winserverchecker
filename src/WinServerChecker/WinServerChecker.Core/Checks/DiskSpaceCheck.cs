@@ -35,6 +35,8 @@ namespace WinServerChecker.Core.Checks
 
             cr.Passed = (percentFree > _mintPercentFreeSpace);
 
+            cr.Data.Add("driveLetter", _driveLetter);
+
             cr.Data.Add("size", size);
             cr.Data.Add("freeSpace", freeSpace);
             cr.Data.Add("percentFree", percentFree);

@@ -23,6 +23,7 @@ namespace WinServerChecker.WebApi.Controllers
         private static object _lock = new object();
         private static ConcurrentDictionary<string, ICheck> _checks;
         private static ConcurrentDictionary<string, IAuthenticator> _authenticators;
+        private static bool _authenticatorsOperatorAny;
 
         public EvaluateController(IConfiguration configuration)
         {
@@ -49,6 +50,13 @@ namespace WinServerChecker.WebApi.Controllers
             //var configSection = _configuration.GetSection("WinServerChecker").Get<WinServerCheckerConfiguration>();
 
             var configSection = _configuration.GetSection("WinServerChecker");
+
+            var ao = _configuration["AuthenticatorsOperator"];
+            _authenticatorsOperatorAny = false;
+            if (string.Equals(ao, "any", StringComparison.OrdinalIgnoreCase))
+            {
+                _authenticatorsOperatorAny = true;
+            }
 
             _checks = new ConcurrentDictionary<string, ICheck>();
 
@@ -108,12 +116,11 @@ namespace WinServerChecker.WebApi.Controllers
 
                 bool isAuthenticated = false;
 
-                //if (_authenticatorsOperatorAny && anyAuthenticated)
-                //{
-                //    isAuthenticated = true;
-                //}
-                //else
-                if (allAuthenticated)
+                if (_authenticatorsOperatorAny && anyAuthenticated)
+                {
+                    isAuthenticated = true;
+                }
+                else if (allAuthenticated)
                 {
                     isAuthenticated = true;
                 }
