@@ -22,6 +22,8 @@ namespace WinServerChecker.Core
         private static ConcurrentDictionary<string, IAuthenticator> _authenticators;
         private static bool _authenticatorsOperatorAny;
 
+        public const string ConfigurationRootName = "WinServerChecker";
+
         public Checker(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -47,7 +49,7 @@ namespace WinServerChecker.Core
         {
             //var configSection = _configuration.GetSection("WinServerChecker").Get<WinServerCheckerConfiguration>();
 
-            var configSection = _configuration.GetSection("WinServerChecker");
+            var configSection = _configuration.GetSection(ConfigurationRootName);
 
             var ao = _configuration["AuthenticatorsOperator"];
             _authenticatorsOperatorAny = false;
